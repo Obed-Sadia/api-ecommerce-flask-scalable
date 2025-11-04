@@ -115,7 +115,7 @@ Ce projet est conçu pour être lancé avec Docker Compose.
 
 2.  Construire l’image Docker
 
-   ```bash
+    ```bash
     docker build -t api8inf349 .
     ```
 
