@@ -10,14 +10,11 @@ Ce projet a été réalisé en deux phases, simulant le cycle de vie réel d'une
 
 ### 📺 Démonstration Visuelle
 
-Ce projet n'étant pas déployé, voici une démonstration de ses concepts clés.
+Ce projet n'étant pas déployé, voici son architecture conceptuelle :
 
-**(Nom : architecture-evolution.png, Type : Schéma PNG)**
-> **[Action] :** [alt text](image.jpg)
-> * **Partie 1 :** Client -> API Flask (avec SQLite) -> API externes.
-> * **Partie 2 :** Client -> API Flask -> **Worker RQ** -> API de paiement.
->     (La Flask API et le Worker lisent/écrivent dans **Postgres** et **Redis**).
-
+![Schéma d'architecture de l'API E-commerce](_docs/architecture-evolution.png)
+* **Partie 1 (MVP) :** Client -> API Flask (SQLite) -> API externes.
+* **Partie 2 (Scalable) :** Client -> API Flask -> Worker RQ (asynchrone) -> API paiement. L'ensemble s'appuyant sur Postgres et Redis.
 
 ---
 
