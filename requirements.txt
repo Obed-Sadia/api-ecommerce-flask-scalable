@@ -1,0 +1,6 @@
+Flask
+peewee
+psycopg2-binary
+redis
+requests
+rq

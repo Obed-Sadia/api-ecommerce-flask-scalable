@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste des produits</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>🛍️ Produits disponibles</h1>
+        <nav>
+            <a href="{{ url_for('create_order_page') }}" class="btn">Créer une commande</a>
+            <a href="{{ url_for('completed_orders_page') }}" class="btn">Commandes terminées</a>
+            <a href="{{ url_for('pending_orders_page') }}" class="btn">Commandes en cours</a>
+            <button class="btn" onclick="submitCart()">Passer la commande</button>
+            <div class="cart-icon" onclick="toggleCart()">
+                🛒 <span id="cart-count">0</span>
+            </div>
+        </nav>
+        <div id="cart-items" class="cart-items" style="display: none;">
+            <h3>Votre panier</h3>
+            <button class="btn clear-cart" onclick="clearCart()">Vider le panier</button>
+            <div id="cart-list"></div>
+        </div>
+    </header>
+    <main>
+        <div id="products-list" class="products-grid"></div>
+    </main>
+    <footer>
+        <p>© 2025 Boutique en ligne</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', fetchProducts);
+    </script>
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détails de la commande #{{ order_id }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>📦 Détails de la commande #{{ order_id }}</h1>
+        <nav>
+            <a href="{{ url_for('products_page') }}" class="btn">Retour aux produits</a>
+        </nav>
+    </header>
+    <main>
+        <div id="order-details" class="order-details"></div>
+        <div id="order-error" style="color: red; display: none;"></div>
+
+        <section id="shipping-section" style="display: none;">
+            <h2>Mettre à jour les informations de livraison</h2>
+            <form id="shipping-form" class="order-form">
+                <label for="email">Email :</label>
+                <input type="email" id="email" name="email" required>
+                <label for="country">Pays :</label>
+                <input type="text" id="country" name="shipping_information[country]" value="Canada" required>
+                <label for="address">Adresse :</label>
+                <input type="text" id="address" name="shipping_information[address]" required>
+                <label for="postal_code">Code postal :</label>
+                <input type="text" id="postal_code" name="shipping_information[postal_code]" pattern="[A-Za-z0-9]{5,7}" required>
+                <label for="city">Ville :</label>
+                <input type="text" id="city" name="shipping_information[city]" required>
+                <label for="province">Province :</label>
+                <select id="province" name="shipping_information[province]" required>
+                    <option value="QC">Québec</option>
+                    <option value="ON">Ontario</option>
+                    <option value="AB">Alberta</option>
+                    <option value="BC">Colombie-Britannique</option>
+                    <option value="NS">Nouvelle-Écosse</option>
+                </select>
+                <button type="submit">Mettre à jour</button>
+            </form>
+        </section>
+
+        <section id="payment-section" style="display: none;">
+            <h2>Payer la commande</h2>
+            <form id="payment-form" class="order-form">
+                    <label for="card_name">Nom sur la carte :</label>
+                    <input type="text" id="card_name" name="credit_card[name]" required>
+            
+            <label for="card_number_select">Numéro de carte :</label>
+            <select id="card_number_select" name="credit_card[number_select]" onchange="toggleCustomCardNumber()">
+                <option value="4242424242424242">4242 4242 4242 4242 (Valide)</option>
+                <option value="4000000000000002">4000 0000 0000 0002 (Déclinée)</option>
+                <option value="custom">Autre</option>
+            </select>
+            
+            <div id="custom_card_number" style="display: none;">
+                <label for="card_number">Numéro de carte personnalisé :</label>
+                <input type="text" id="card_number" name="credit_card[number]" pattern="\d{16}" maxlength="16">
+            </div>
+
+            <label for="expiration_year">Année d'expiration :</label>
+            
+            <input type="number" id="expiration_year" name="credit_card[expiration_year]" min="2024" max="2035" required>
+            
+            <label for="cvv">CVV :</label>
+            <input type="text" id="cvv" name="credit_card[cvv]" pattern="\d{3,4}" maxlength="4" required>
+
+            <label for="expiration_month">Mois d'expiration :</label>
+            <input type="number" id="expiration_month" name="credit_card[expiration_month]" min="1" max="12" required>
+            
+            
+                <button type="submit">Payer</button>
+                </form>
+        </section>
+    </main>
+    <footer>
+        <p>© 2025 Boutique en ligne</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+    <script>
+        window.orderId = "{{ order_id }}";
+        function toggleCustomCardNumber() {
+            const select = document.getElementById('card_number_select');
+            const customDiv = document.getElementById('custom_card_number');
+            const customInput = document.getElementById('card_number');
+    
+            if (select.value === 'custom') {
+                customDiv.style.display = 'block';
+                customInput.setAttribute('required', 'required');
+                customInput.setAttribute('name', 'credit_card[number]');
+                select.setAttribute('name', 'credit_card[number_select]');
+            } else {
+                customDiv.style.display = 'none';
+                customInput.removeAttribute('required');
+                customInput.removeAttribute('name');
+                select.setAttribute('name', 'credit_card[number]');
+            }
+        }
+    
+        // Appeler la fonction au chargement pour gérer l'état initial
+        document.addEventListener('DOMContentLoaded', () => {
+            toggleCustomCardNumber();
+        });
+    </script>
+</body>
+</html>

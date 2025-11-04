@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Créer une commande</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>🛒 Créer une commande</h1>
+        <nav>
+            <a href="{{ url_for('products_page') }}" class="btn">Retour aux produits</a>
+        </nav>
+    </header>
+    <main>
+        <form id="create-order-form" class="order-form">
+            <div id="products-container">
+                <div class="product-field" data-index="0">
+                    <label for="product_0_id">Produit :</label>
+                    <select name="products[0][id]" id="product_0_id" required>
+                        <option value="" disabled selected>Sélectionnez un produit</option>
+                    </select>
+                    <label for="product_0_quantity">Quantité :</label>
+                    <input type="number" name="products[0][quantity]" id="product_0_quantity" min="1" value="1" required>
+                </div>
+            </div>
+            <button type="button" onclick="addProductField()">Ajouter un produit</button>
+            <button type="submit">Créer la commande</button>
+            <div id="form-error" style="color: red; display: none;"></div>
+        </form>
+    </main>
+    <footer>
+        <p>© 2025 Boutique en ligne</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+</body>
+</html>

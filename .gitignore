@@ -1,0 +1,20 @@
+# Fichier .gitignore pour Python/Flask
+
+# Cache Python
+__pycache__/
+*.pyc
+
+# Fichiers d'environnement 
+.env
+.venv
+venv/
+env/
+
+# Fichiers de BDD locale
+*.sqlite
+*.sqlite3
+database.db
+
+# Fichiers IDE
+.idea/
+.vscode/

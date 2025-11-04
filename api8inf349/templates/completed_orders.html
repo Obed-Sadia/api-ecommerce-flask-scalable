@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Commandes terminées</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>✅ Commandes terminées</h1>
+        <nav>
+            <a href="{{ url_for('products_page') }}" class="btn">Retour aux produits</a>
+            <a href="{{ url_for('create_order_page') }}" class="btn">Créer une commande</a>
+            <a href="{{ url_for('pending_orders_page') }}" class="btn">Commandes en cours</a>
+        </nav>
+    </header>
+    <main>
+        <div id="completed-orders-list" class="orders-grid">
+            <p>Chargement des commandes terminées...</p>
+        </div>
+        <div id="orders-error" style="color: red; display: none;"></div>
+    </main>
+    <footer>
+        <p>© 2025 Boutique en ligne</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+    <script>
+        async function fetchCompletedOrders() {
+            try {
+                const ordersList = document.getElementById('completed-orders-list');
+                const errorDiv = document.getElementById('orders-error');
+                const orders = [];
+                let orderId = 1;
+
+                // Continue fetching orders until a 404 is encountered
+                while (true) {
+                    try {
+                        const response = await fetch(`/order/${orderId}`, {
+                            headers: { 'Accept': 'application/json' }
+                        });
+                        if (response.status === 404) {
+                            // No more orders exist
+                            break;
+                        }
+                        if (!response.ok) {
+                            throw new Error(`Erreur lors de la récupération de la commande ${orderId}`);
+                        }
+                        const data = await response.json();
+                        const order = data.order;
+                        // Only include completed orders (paid: true)
+                        if (order.paid) {
+                            orders.push(order);
+                        }
+                    } catch (error) {
+                        if (error.message.includes('404')) {
+                            break; // Stop on 404
+                        }
+                        console.error(`Erreur pour la commande ${orderId}:`, error);
+                    }
+                    orderId++;
+                }
+
+                // Update the UI
+                if (ordersList) {
+                    ordersList.innerHTML = '';
+                    if (orders.length === 0) {
+                        ordersList.innerHTML = '<p>Aucune commande terminée.</p>';
+                        return;
+                    }
+                    orders.forEach(order => {
+                        const orderCard = document.createElement('div');
+                        orderCard.className = 'order-card';
+                        orderCard.innerHTML = `
+                            <h3>Commande #${order.id}</h3>
+                            <p><strong>Prix total :</strong> ${order.total_price_tax || order.total_price} $</p>
+                            <p><strong>Produits :</strong> ${order.products.map(p => `ID ${p.id} (x${p.quantity})`).join(', ')}</p>
+                            <p><strong>Statut :</strong> Payé</p>
+                        `;
+                        orderCard.addEventListener('click', () => {
+                            window.location.href = `/view/order/${order.id}`;
+                        });
+                        ordersList.appendChild(orderCard);
+                    });
+                }
+                if (errorDiv) errorDiv.style.display = 'none';
+            } catch (error) {
+                console.error('Erreur:', error);
+                if (errorDiv) {
+                    errorDiv.textContent = 'Erreur lors du chargement des commandes terminées.';
+                    errorDiv.style.display = 'block';
+                }
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', fetchCompletedOrders);
+    </script>
+</body>
+</html>
